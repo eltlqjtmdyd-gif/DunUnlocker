@@ -1,0 +1,140 @@
+<resources>
+    <string name="app_name">DunUnlocker</string>
+
+    <!-- Top Bar -->
+    <string name="top_bar_title">DunUnlocker</string>
+    <string name="menu_app_info">App Info</string>
+    <string name="menu_more_options">More options</string>
+
+    <!-- App Info Dialog -->
+    <string name="app_info_title">App Information</string>
+    <string name="app_info_version">Version</string>
+    <string name="app_info_description">DunUnlocker allows you to configure APN settings with DUN (Dial-Up Networking) type for tethering on Android devices.</string>
+    <string name="app_info_developer">Developer</string>
+    <string name="app_info_developer_name">Ample (naijun0403)</string>
+    <string name="app_info_github">GitHub</string>
+    <string name="app_info_github_url">github.com/naijun0403/DunUnlocker</string>
+    <string name="app_info_license">License</string>
+    <string name="app_info_license_type">GPL-3.0-only</string>
+    <string name="app_info_close">Close</string>
+    <string name="unknown_version">Unknown</string>
+    <string name="unknown_error">Unknown error</string>
+
+    <!-- Shizuku Status Card -->
+    <string name="shizuku_status_title">Shizuku Status</string>
+    <string name="shizuku_granted_message">Shizuku permission granted. You can proceed with APN settings.</string>
+    <string name="shizuku_running_message">Shizuku is running. Please grant permission.</string>
+    <string name="shizuku_not_running_message">Shizuku is not running. Please run the Shizuku app first.</string>
+    <string name="shizuku_permission_denied">Shizuku permission denied.</string>
+    <string name="shizuku_permission_required">Shizuku permission is required.</string>
+    <string name="shizuku_permission_not_running">Shizuku is not running. Please run the Shizuku app first.</string>
+    <string name="shizuku_permission_allow_prompt">Shizuku permission is required. Please allow permission.</string>
+    <string name="shizuku_permission_check_error">An error occurred while checking permission: %s</string>
+    <string name="shizuku_permission_request_error">An error occurred while requesting permission: %s</string>
+    <string name="shizuku_request_button">Request Shizuku Permission</string>
+    <string name="shizuku_install_button">Install Shizuku</string>
+
+    <!-- SIM Selection Card -->
+    <string name="sim_card_selection">SIM Card Selection</string>
+    <string name="sim_card_label">SIM Card</string>
+    <string name="no_active_sim">No active SIM cards</string>
+    <string name="sim_select_placeholder">Select a SIM</string>
+    <string name="sim_info_format">MCC: %1$s, MNC: %2$s</string>
+    <string name="sim_unknown_carrier">Unknown</string>
+    <string name="sim_default_name">SIM %d</string>
+
+    <!-- APN Configuration Section -->
+    <string name="apn_settings_title">APN Settings</string>
+    <string name="carrier_selection">Carrier Selection</string>
+    <string name="carrier_label">Carrier</string>
+    <string name="carrier_skt_5g">SKT (5G)</string>
+    <string name="carrier_skt_lte">SKT (LTE)</string>
+    <string name="carrier_kt_5g">KT (5G)</string>
+    <string name="carrier_kt_lte">KT (LTE)</string>
+    <string name="carrier_lgu_5g">LG U+ (5G)</string>
+    <string name="carrier_lgu_lte">LG U+ (LTE)</string>
+    <string name="carrier_custom">Custom</string>
+    <string name="carrier_custom_description">Manually configure APN settings</string>
+    <string name="carrier_custom_notice">All fields are required for Custom carrier configuration. Please fill in all the information carefully.</string>
+    <string name="additional_info_optional">Additional Info (Optional)</string>
+    <string name="additional_info_required">APN Configuration</string>
+    <string name="basic_settings">Basic Settings</string>
+    <string name="apn_name_label">Name</string>
+    <string name="apn_name_placeholder">e.g., Internet</string>
+    <string name="apn_name_hint">APN profile name</string>
+    <string name="apn_address_label">APN Address</string>
+    <string name="apn_address_placeholder">e.g., 5g.sktelecom.com</string>
+    <string name="apn_address_hint">Carrier APN server address</string>
+    <string name="apn_type_label">APN Type</string>
+    <string name="apn_type_placeholder">e.g., default,supl,mms,dun</string>
+    <string name="apn_type_hint">Enter with commas (default, supl, mms, dun, etc.)</string>
+    <string name="mms_settings">MMS Settings</string>
+    <string name="mms_settings_5g">5G: Optional</string>
+    <string name="mms_settings_lte">LTE: Recommended</string>
+    <string name="mms_settings_enable">Use MMS Settings</string>
+    <string name="mms_settings_enabled">MMS feature is enabled</string>
+    <string name="mms_settings_disabled">MMS feature is disabled</string>
+    <string name="mmsc_label">MMSC</string>
+    <string name="mmsc_placeholder">e.g., http://omms.nate.com:9082/oma_mms</string>
+    <string name="mmsc_hint">Multimedia Message Service Center address</string>
+    <string name="mms_proxy_label">MMS Proxy</string>
+    <string name="mms_proxy_placeholder">e.g., lteoma.nate.com</string>
+    <string name="mms_proxy_hint">Proxy server for MMS transmission</string>
+    <string name="mms_port_label">MMS Port</string>
+    <string name="mms_port_placeholder">e.g., 9093</string>
+    <string name="mms_port_hint">MMS proxy port number</string>
+    <string name="network_settings">Network Settings</string>
+    <string name="mcc_label">MCC</string>
+    <string name="mcc_placeholder">450</string>
+    <string name="mcc_hint">Country code</string>
+    <string name="mnc_label">MNC</string>
+    <string name="mnc_placeholder">05</string>
+    <string name="mnc_hint">Carrier code</string>
+    <string name="auth_type_label">Authentication Type</string>
+    <string name="auth_type_none">None</string>
+    <string name="auth_type_pap">PAP</string>
+    <string name="auth_type_chap">CHAP</string>
+    <string name="auth_type_pap_or_chap">PAP or CHAP</string>
+    <string name="auth_type_hint">APN authentication protocol</string>
+    <string name="protocol_label">Protocol</string>
+    <string name="protocol_hint">IP protocol version for APN connection</string>
+    <string name="roaming_protocol_label">Roaming Protocol</string>
+    <string name="roaming_protocol_hint">IP protocol version when roaming</string>
+
+    <!-- Auth Type String Constants for internal use -->
+    <string name="auth_type_value_none">None</string>
+    <string name="auth_type_value_pap">PAP</string>
+    <string name="auth_type_value_chap">CHAP</string>
+    <string name="auth_type_value_pap_or_chap">PAP or CHAP</string>
+    <string name="apply_button">Apply APN Settings</string>
+
+    <!-- Validation Errors -->
+    <string name="validation_error_required_fields">Please fill in required fields: %s</string>
+    <string name="validation_error_name">Name</string>
+    <string name="validation_error_apn_address">APN Address</string>
+    <string name="validation_error_apn_type">APN Type</string>
+    <string name="validation_error_mcc">MCC</string>
+    <string name="validation_error_mnc">MNC</string>
+    <string name="validation_error_mmsc">MMSC</string>
+    <string name="validation_error_mms_port">MMS Port</string>
+
+    <!-- APN Apply Confirmation Dialog -->
+    <string name="confirm_dialog_title">Apply APN Settings</string>
+    <string name="confirm_dialog_message">Do you want to apply APN settings for %s carrier?</string>
+    <string name="confirm_dialog_message_custom">Do you want to apply custom APN settings?</string>
+    <string name="confirm_dialog_target_sim">Target SIM</string>
+    <string name="confirm_dialog_important_notice">Important Notice</string>
+    <string name="confirm_dialog_notice_content">• APN settings will be applied in the background\n• Please verify the APN in the Settings app\n• You can verify the APN at Settings > Network and Internet > Mobile Network</string>
+    <string name="confirm_button">Apply</string>
+    <string name="cancel_button">Cancel</string>
+
+    <!-- Loading Dialog -->
+    <string name="loading_dialog_title">Applying APN Settings...</string>
+    <string name="loading_dialog_subtitle">Please wait a moment</string>
+
+    <!-- Success and Error Messages -->
+    <string name="apn_apply_success">APN settings have been requested. Please check the Settings app.</string>
+    <string name="apn_apply_failure">Failed to apply APN settings: %s</string>
+    <string name="carrier_not_supported">Unsupported carrier.</string>
+    <string name="error_occurred">An error occurred: %s</string>
+</resources>
