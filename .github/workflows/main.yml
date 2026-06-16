@@ -3,6 +3,10 @@ name: Build DunUnlocker APK
 on:
   workflow_dispatch:
 
+# 지긋지긋한 Node.js 경고문 차단 명령어
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -40,7 +44,7 @@ jobs:
         for url in "${URLS[@]}"; do
           echo "다운로드 시도 중: $url"
           if wget -qO $ANDROID_HOME/platforms/android-34/android.jar "$url"; then
-            # 파일 용량이 비정상적(1MB 이하)이면 LFS 포인터이거나 오류이므로 무시하고 다음 링크로 넘어감
+            # 파일 용량이 비정상적(1MB 이하)이면 무시하고 다음 링크로 넘어감
             FILESIZE=$(stat -c%s "$ANDROID_HOME/platforms/android-34/android.jar")
             if [ "$FILESIZE" -gt 1000000 ]; then
               echo "다운로드 성공! (크기: $FILESIZE 바이트)"
