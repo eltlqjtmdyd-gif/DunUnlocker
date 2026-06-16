@@ -11,11 +11,15 @@ jobs:
     - name: 소스 코드 가져오기
       uses: actions/checkout@v4
 
-    - name: 자바(JDK) 17 환경 세팅
+    - name: 자바(JDK) 환경 세팅 (API 35 대응)
       uses: actions/setup-java@v4
       with:
-        java-version: '17'
+        java-version: '21'
         distribution: 'zulu'
+
+    - name: 숨겨진 API 우회 라이브러리 강제 주입
+      run: |
+        echo 'dependencies { compileOnly("dev.rikka.hidden:stub:4.3.0") }' >> app/build.gradle.kts
 
     - name: Gradle 실행 권한 부여
       run: chmod +x gradlew
