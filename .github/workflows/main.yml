@@ -17,22 +17,23 @@ jobs:
         java-version: '17'
         distribution: 'zulu'
 
-    - name: Shizuku 기반 빌드 환경 구성 (안전한 우회 방식)
+    - name: 확실한 빌드를 위한 API 버전 강제 다운그레이드 (35 -> 34)
       run: |
-        cat << 'EOF' >> app/build.gradle.kts
-        
-        dependencies {
-            compileOnly("dev.rikka.shizuku:api:13.1.0")
-            compileOnly("dev.rikka.shizuku:provider:13.1.0")
-            compileOnly("dev.rikka.hidden:stub:4.3.0")
-        }
-        EOF
+        sed -i 's/compileSdk = 35/compileSdk = 34/g' app/build.gradle.kts
+        sed -i 's/targetSdk = 35/targetSdk = 34/g' app/build.gradle.kts
 
-    - name: 이전 빌드의 잘못된 잔재 초기화 (에러 방지)
-      run: git checkout app/build.gradle.kts || true
-        
-    - name: Gradle 실행 권한 부여
-      run: chmod +x gradlew
+    - name: Android API 34 플랫폼 설치
+      run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-34"
+
+    - name: 검증된 숨겨진 API(android.jar) 강제 덮어쓰기 (정석 방식)
+      run: |
+        rm -f $ANDROID_HOME/platforms/android-34/android.jar
+        wget -qO $ANDROID_HOME/platforms/android-34/android.jar https://github.com/anggrayudi/android-hidden-api/raw/master/android-34/android.jar
+
+    - name: 빌드 에러 방지를 위한 권한 부여 및 클린업
+      run: |
+        chmod +x gradlew
+        ./gradlew clean
 
     - name: APK 파일 빌드 (컴파일 진행)
       run: ./gradlew assembleDebug
