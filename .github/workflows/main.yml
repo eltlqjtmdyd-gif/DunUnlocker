@@ -1,3 +1,6 @@
+YAML
+
+
 name: Build DunUnlocker APK
 
 on:
@@ -17,23 +20,20 @@ jobs:
         java-version: '17'
         distribution: 'zulu'
 
-    - name: Android API 35 플랫폼 설치
+    - name: Shizuku 기반 빌드 환경 구성 (안전한 우회 방식)
       run: |
-        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-35"
-
-    - name: 원본 가이드 정석대로 숨겨진 API(android.jar) 덮어쓰기
-      run: |
-        rm -f $ANDROID_HOME/platforms/android-35/android.jar
-        JAR_URL="https://github.com/anggrayudi/android-hidden-api/raw/master/android-35/android.jar"
-        if ! curl --output /dev/null --silent --head --fail "$JAR_URL"; then
-          echo "API 35 파일을 찾을 수 없어 34로 대체합니다."
-          JAR_URL="https://github.com/anggrayudi/android-hidden-api/raw/master/android-34/android.jar"
-        fi
-        wget -qO $ANDROID_HOME/platforms/android-35/android.jar $JAR_URL
+        cat << 'EOF' >> app/build.gradle.kts
+        
+        dependencies {
+            compileOnly("dev.rikka.shizuku:api:13.1.0")
+            compileOnly("dev.rikka.shizuku:provider:13.1.0")
+            compileOnly("dev.rikka.hidden:stub:4.3.0")
+        }
+        EOF
 
     - name: 이전 빌드의 잘못된 잔재 초기화 (에러 방지)
       run: git checkout app/build.gradle.kts || true
-
+        
     - name: Gradle 실행 권한 부여
       run: chmod +x gradlew
 
