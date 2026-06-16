@@ -11,18 +11,28 @@ jobs:
     - name: 소스 코드 가져오기
       uses: actions/checkout@v4
 
-    - name: 자바(JDK) 환경 세팅 (API 35 대응)
+    - name: 자바(JDK) 17 세팅
       uses: actions/setup-java@v4
       with:
-        java-version: '21'
+        java-version: '17'
         distribution: 'zulu'
 
-    - name: 숨겨진 API 우회 라이브러리 정상 주입 (줄바꿈 수정)
+    - name: Android API 35 플랫폼 설치
       run: |
-        echo "" >> app/build.gradle.kts
-        echo "dependencies {" >> app/build.gradle.kts
-        echo "    compileOnly(\"dev.rikka.hidden:stub:4.3.0\")" >> app/build.gradle.kts
-        echo "}" >> app/build.gradle.kts
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-35"
+
+    - name: 원본 가이드 정석대로 숨겨진 API(android.jar) 덮어쓰기
+      run: |
+        rm -f $ANDROID_HOME/platforms/android-35/android.jar
+        JAR_URL="https://github.com/anggrayudi/android-hidden-api/raw/master/android-35/android.jar"
+        if ! curl --output /dev/null --silent --head --fail "$JAR_URL"; then
+          echo "API 35 파일을 찾을 수 없어 34로 대체합니다."
+          JAR_URL="https://github.com/anggrayudi/android-hidden-api/raw/master/android-34/android.jar"
+        fi
+        wget -qO $ANDROID_HOME/platforms/android-35/android.jar $JAR_URL
+
+    - name: 이전 빌드의 잘못된 잔재 초기화 (에러 방지)
+      run: git checkout app/build.gradle.kts || true
 
     - name: Gradle 실행 권한 부여
       run: chmod +x gradlew
@@ -30,7 +40,7 @@ jobs:
     - name: APK 파일 빌드 (컴파일 진행)
       run: ./gradlew assembleDebug
 
-    - name: 완성된 APK 파일 업로드
+    - name: 완성된 APK 다운로드 파일 생성
       uses: actions/upload-artifact@v4
       with:
         name: DunUnlocker-APK
