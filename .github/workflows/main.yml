@@ -3,7 +3,6 @@ name: Build DunUnlocker APK
 on:
   workflow_dispatch:
 
-# 지긋지긋한 Node.js 경고문 차단 명령어
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -21,53 +20,57 @@ jobs:
         java-version: '17'
         distribution: 'zulu'
 
-    - name: 소스코드 버전을 34로 강제 하향 (버전 충돌 방지)
+    - name: 가짜 파일 원천 차단! (진짜 숨겨진 API 탐색 및 주입)
       run: |
-        sed -i -E 's/compileSdk\s*=\s*[0-9]+/compileSdk = 34/g' app/build.gradle.kts
-        sed -i -E 's/targetSdk\s*=\s*[0-9]+/targetSdk = 34/g' app/build.gradle.kts
-
-    - name: 순정 Android API 34 플랫폼 설치
-      run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-34"
-
-    - name: 숨겨진 API(android.jar) 다운로드 및 강제 덮어쓰기 (3중 백업)
-      run: |
-        rm -f $ANDROID_HOME/platforms/android-34/android.jar
-        
-        # 파일이 확실히 살아있는 깃허브 직통 주소 3곳
-        URLS=(
-          "https://raw.githubusercontent.com/Reginer/aosp-android-jar/master/android-34/android.jar"
-          "https://raw.githubusercontent.com/Reginer/aosp-android-jar/main/android-34/android.jar"
-          "https://raw.githubusercontent.com/sable/android-platforms/master/android-34/android.jar"
+        SUCCESS=0
+        # 유명한 전 세계 안드로이드 개조 저장소 목록
+        REPOS=(
+          "anggrayudi/android-hidden-api/master"
+          "anggrayudi/android-hidden-api/main"
+          "JetpackDuba/android-jar-with-hidden-api/master"
+          "simonsickle/android-hidden-api-jars/main"
         )
         
-        SUCCESS=0
-        for url in "${URLS[@]}"; do
-          echo "다운로드 시도 중: $url"
-          if wget -qO $ANDROID_HOME/platforms/android-34/android.jar "$url"; then
-            # 파일 용량이 비정상적(1MB 이하)이면 무시하고 다음 링크로 넘어감
-            FILESIZE=$(stat -c%s "$ANDROID_HOME/platforms/android-34/android.jar")
-            if [ "$FILESIZE" -gt 1000000 ]; then
-              echo "다운로드 성공! (크기: $FILESIZE 바이트)"
-              SUCCESS=1
-              break
-            else
-              echo "다운로드 되었으나 파일이 너무 작음. 다음 링크 시도..."
+        # API 35부터 30까지 내려가며 모든 저장소를 찌름
+        for API_VER in 35 34 33 32 31 30; do
+          for REPO in "${REPOS[@]}"; do
+            URL="https://raw.githubusercontent.com/$REPO/android-$API_VER/android.jar"
+            echo "탐색 중: API $API_VER - $URL"
+            
+            if wget -qO temp.jar "$URL"; then
+              # [핵심] 다운받은 파일 내부에 진짜 'IActivityManager'가 존재하는지 압축을 열어 검사!
+              if unzip -l temp.jar 2>/dev/null | grep -q "IActivityManager"; then
+                echo "=> [성공] 진짜 숨겨진 API를 찾았습니다! (API $API_VER, Repo: $REPO)"
+                
+                # 원본 앱의 빌드 버전을 찾은 API 버전에 맞춰 강제 동기화
+                sed -i -E "s/compileSdk\s*=\s*[0-9]+/compileSdk = $API_VER/g" app/build.gradle.kts
+                sed -i -E "s/targetSdk\s*=\s*[0-9]+/targetSdk = $API_VER/g" app/build.gradle.kts
+                
+                # 안드로이드 플랫폼 설치
+                yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-$API_VER" > /dev/null
+                
+                # 확인된 진짜 파일로 덮어쓰기
+                mv temp.jar $ANDROID_HOME/platforms/android-$API_VER/android.jar
+                SUCCESS=1
+                break 2
+              fi
             fi
-          fi
+          done
         done
         
         if [ "$SUCCESS" -eq 0 ]; then
-          echo "모든 링크에서 다운로드 실패"
+          echo "모든 저장소 탐색 실패. 진짜 숨겨진 API를 찾지 못했습니다."
           exit 1
         fi
 
-    - name: 빌드 클린업 및 권한 부여
+    - name: 이전 실패 잔재 초기화 및 캐시 무시
       run: |
         chmod +x gradlew
         ./gradlew clean
 
     - name: APK 파일 빌드 (컴파일 진행)
-      run: ./gradlew assembleDebug
+      # --no-daemon을 통해 기존에 실패했던 찌꺼기 메모리를 무시하고 100% 새롭게 빌드
+      run: ./gradlew assembleDebug --no-daemon
 
     - name: 완성된 APK 다운로드 파일 생성
       uses: actions/upload-artifact@v4
