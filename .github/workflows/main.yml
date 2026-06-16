@@ -17,9 +17,12 @@ jobs:
         java-version: '21'
         distribution: 'zulu'
 
-    - name: 숨겨진 API 우회 라이브러리 강제 주입
+    - name: 숨겨진 API 우회 라이브러리 정상 주입 (줄바꿈 수정)
       run: |
-        echo 'dependencies { compileOnly("dev.rikka.hidden:stub:4.3.0") }' >> app/build.gradle.kts
+        echo "" >> app/build.gradle.kts
+        echo "dependencies {" >> app/build.gradle.kts
+        echo "    compileOnly(\"dev.rikka.hidden:stub:4.3.0\")" >> app/build.gradle.kts
+        echo "}" >> app/build.gradle.kts
 
     - name: Gradle 실행 권한 부여
       run: chmod +x gradlew
