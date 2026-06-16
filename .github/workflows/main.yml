@@ -17,10 +17,11 @@ jobs:
         java-version: '17'
         distribution: 'zulu'
 
-    - name: 확실한 빌드를 위한 API 버전 강제 다운그레이드 (35 -> 34)
+    - name: 확실한 빌드를 위한 API 버전 강제 동기화 (Regex 적용)
       run: |
-        sed -i 's/compileSdk = 35/compileSdk = 34/g' app/build.gradle.kts
-        sed -i 's/targetSdk = 35/targetSdk = 34/g' app/build.gradle.kts
+        # 원본 소스의 SDK 버전(35, 36 등)이 무엇이든 무조건 34로 강제 변경
+        sed -i -E 's/compileSdk\s*=\s*[0-9]+/compileSdk = 34/g' app/build.gradle.kts
+        sed -i -E 's/targetSdk\s*=\s*[0-9]+/targetSdk = 34/g' app/build.gradle.kts
 
     - name: Android API 34 플랫폼 설치
       run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-34"
